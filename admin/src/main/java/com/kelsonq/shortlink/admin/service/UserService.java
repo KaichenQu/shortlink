@@ -16,5 +16,4 @@ public interface UserService extends IService<UserDO> {
    * @return user response data transfer object
    */
   UserRespDTO getUserByUsername(String username);
-
 }
