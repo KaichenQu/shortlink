@@ -1,7 +1,9 @@
 package com.kelsonq.shortlink.admin.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.kelsonq.shortlink.admin.common.convension.result.Result;
 import com.kelsonq.shortlink.admin.common.convension.result.Results;
+import com.kelsonq.shortlink.admin.dto.resp.UserRespActDTO;
 import com.kelsonq.shortlink.admin.dto.resp.UserRespDTO;
 import com.kelsonq.shortlink.admin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,9 @@ public class UserController {
   @GetMapping("/api/shortlink/admin/v1/user/{username}")
   public Result<UserRespDTO> getUserByUsername(@PathVariable("username") String username) {
     return Results.success(userService.getUserByUsername(username));
+  }
+  @GetMapping("/api/shortlink/admin/actual/v1/user/{username}")
+  public Result<UserRespActDTO> getUserByUsernameActual(@PathVariable("username") String username) {
+    return Results.success(BeanUtil.toBean(userService.getUserByUsername(username), UserRespActDTO.class));
   }
 }

@@ -1,14 +1,13 @@
 package com.kelsonq.shortlink.admin.dto.resp;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.kelsonq.shortlink.admin.common.serialize.PhoneDesensitizationSerializer;
 import lombok.Data;
 
 /**
  * User response data transfer object
  */
 @Data
-public class UserRespDTO {
+public class UserRespActDTO {
+
   /**
    * ID
    */
@@ -28,7 +27,7 @@ public class UserRespDTO {
   /**
    * Mobile Phone
    */
-  @JsonSerialize(using = PhoneDesensitizationSerializer.class)
+
   private String phone;
 
   /**

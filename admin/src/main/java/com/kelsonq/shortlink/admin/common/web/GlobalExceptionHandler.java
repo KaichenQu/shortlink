@@ -1,8 +1,8 @@
 package com.kelsonq.shortlink.admin.common.web;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
+
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.google.common.collect.Iterables;
 import com.kelsonq.shortlink.admin.common.convension.IErrorCode.BaseErrorCode;
 import com.kelsonq.shortlink.admin.common.convension.exception.AbstractException;
 import com.kelsonq.shortlink.admin.common.convension.result.Result;
@@ -34,10 +34,10 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
   public Result<Void> validExceptionHandler(HttpServletRequest request, MethodArgumentNotValidException ex) {
     BindingResult bindingResult = ex.getBindingResult();
-    FieldError firstFieldError = CollectionUtil.getFirst(bindingResult.getFieldErrors());
+    FieldError firstFieldError = Iterables.getFirst(bindingResult.getFieldErrors(), null);
     String exceptionStr = Optional.ofNullable(firstFieldError)
         .map(FieldError::getDefaultMessage)
-        .orElse(StrUtil.EMPTY);
+        .orElse("");
     log.error("[{}] {} [ex] {}", request.getMethod(), getUrl(request), exceptionStr);
     return Results.failure(BaseErrorCode.CLIENT_ERROR.code(), exceptionStr);
   }
