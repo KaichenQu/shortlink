@@ -16,13 +16,36 @@ public class PhoneDesensitizationSerializer extends JsonSerializer<String> {
   }
 
   private String maskPhone(String phone) {
-    if (Strings.isNullOrEmpty(phone) || phone.length() < 5) {
-      return phone; // phone number is too short, no need to mask
+    if (Strings.isNullOrEmpty(phone)) {
+      return phone;
     }
-    int length = phone.length();
-    int maskedNum = Math.min(4, length - 4);
-    String maskedPart = Strings.repeat("*", maskedNum);
 
-    return phone.substring(0, 3) + maskedPart + phone.substring(3 + maskedNum);
+    String digitsOnly = phone.replaceAll("[^0-9]", "");
+
+    if (digitsOnly.length() < 7) {
+      return phone;
+    }
+
+    String countryCode = "";
+    String remainingNumber = digitsOnly;
+
+    if (digitsOnly.startsWith("1") && digitsOnly.length() == 11) {
+      countryCode = "+1";
+      remainingNumber = digitsOnly.substring(1);
+    } else if (digitsOnly.startsWith("86") && digitsOnly.length() == 11) {
+
+      countryCode = "+86";
+      remainingNumber = digitsOnly.substring(2);
+    } else if (digitsOnly.length() > 10) {
+      countryCode = "+" + digitsOnly.substring(0, 3);
+      remainingNumber = digitsOnly.substring(3);
+    }
+
+    return countryCode + " " +
+        remainingNumber.substring(0, 3) + "-****-" +
+        remainingNumber.substring(remainingNumber.length() - 3);
+
   }
+
+
 }

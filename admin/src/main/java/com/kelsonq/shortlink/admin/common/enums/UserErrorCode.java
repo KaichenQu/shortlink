@@ -3,7 +3,10 @@ package com.kelsonq.shortlink.admin.common.enums;
 import com.kelsonq.shortlink.admin.common.convension.IErrorCode.IErrorCode;
 
 public enum UserErrorCode implements IErrorCode {
-  USER_NOT_FOUND("B000200", "User not found");
+  USER_NOT_FOUND("B000200", "User not found"),
+  USER_NAME_EXISTS("B000201", "Username already exists"),
+  USER_EXISTS("B000202", "User already exists"),
+  USER_SAVE_ERROR("B000203", "Failed to save user information");
 
   private final String code;
 

@@ -2,6 +2,7 @@ package com.kelsonq.shortlink.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.kelsonq.shortlink.admin.dao.entity.UserDO;
+import com.kelsonq.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.kelsonq.shortlink.admin.dto.resp.UserRespDTO;
 
 /**
@@ -24,6 +25,12 @@ public interface UserService extends IService<UserDO> {
    * @return true if the username exists
    */
 
-  Boolean hasUsername(String username);
+  Boolean validUsername(String username);
 
+  /**
+   * Register user
+   *
+   * @param registerReqParam user register request data transfer object
+   */
+  void registerUser(UserRegisterReqDTO registerReqParam);
 }

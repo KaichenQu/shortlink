@@ -1,5 +1,7 @@
 package com.kelsonq.shortlink.admin.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import lombok.Data;
@@ -49,15 +51,19 @@ public class UserDO {
   /**
    * Create Time
    */
+  @TableField(fill = FieldFill.INSERT)
   private Date createTime;
 
   /**
    * Update Time
    */
+  @TableField(fill = FieldFill.INSERT_UPDATE)
+
   private Date updateTime;
 
   /**
    * Delete Flag 0: Exist 1: Delete
    */
+  @TableField(fill = FieldFill.INSERT)
   private Integer delFlag;
 }

@@ -1,5 +1,6 @@
 package com.kelsonq.shortlink.admin.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,6 +8,7 @@ import com.kelsonq.shortlink.admin.common.convension.exception.ClientException;
 import com.kelsonq.shortlink.admin.common.enums.UserErrorCode;
 import com.kelsonq.shortlink.admin.dao.entity.UserDO;
 import com.kelsonq.shortlink.admin.dao.mapper.UserMapper;
+import com.kelsonq.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.kelsonq.shortlink.admin.dto.resp.UserRespDTO;
 import com.kelsonq.shortlink.admin.service.UserService;
 import java.util.Optional;
@@ -36,8 +38,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
   }
 
   @Override
-  public Boolean hasUsername(String username) {
-    return userRegisterCachePenetrationBloomFilter.contains(username);
+  public Boolean validUsername(String username) {
+    return !userRegisterCachePenetrationBloomFilter.contains(username);
+  }
+
+  @Override
+  public void registerUser(UserRegisterReqDTO registerReqParam) {
+    if(!validUsername(registerReqParam.getUsername())) {
+      throw new ClientException(UserErrorCode.USER_NAME_EXISTS);
+    }
+    int insert = baseMapper.insert(BeanUtil.toBean(registerReqParam, UserDO.class));
+    if(insert < 1) {
+      throw new ClientException(UserErrorCode.USER_SAVE_ERROR);
+    }
+    userRegisterCachePenetrationBloomFilter.add(registerReqParam.getUsername());
   }
 }
 
