@@ -16,4 +16,14 @@ public interface UserService extends IService<UserDO> {
    * @return user response data transfer object
    */
   UserRespDTO getUserByUsername(String username);
+
+  /**
+   * Check if the username exists
+   *
+   * @param username username
+   * @return true if the username exists
+   */
+
+  Boolean hasUsername(String username);
+
 }
