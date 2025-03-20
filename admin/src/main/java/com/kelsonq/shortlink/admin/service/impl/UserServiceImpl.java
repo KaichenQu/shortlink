@@ -15,6 +15,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
+import org.redisson.api.RRateLimiter;
+import org.redisson.api.RateIntervalUnit;
+import org.redisson.api.RateType;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -49,6 +52,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
   @Override
   public void registerUser(UserRegisterReqDTO registerReqParam) {
+    RRateLimiter rateLimiter = redissonClient.getRateLimiter("RATE_LIMITER_USER_REGISTER_KEY" + registerReqParam.getUsername());
+    rateLimiter.trySetRate(RateType.OVERALL, 1, 10, RateIntervalUnit.SECONDS);
+    if (!rateLimiter.tryAcquire()) {
+      throw new ClientException(UserErrorCode.USER_FREQUENTLY);
+    }
+
     if (!validUsername(registerReqParam.getUsername())) {
       throw new ClientException(UserErrorCode.USER_NAME_EXISTS);
     }
