@@ -42,8 +42,8 @@ public class PhoneDesensitizationSerializer extends JsonSerializer<String> {
     }
 
     return countryCode + " " +
-        remainingNumber.substring(0, 3) + "-****-" +
-        remainingNumber.substring(remainingNumber.length() - 3);
+        remainingNumber.substring(0, 3) + "-***-**" +
+        remainingNumber.substring(remainingNumber.length() - 2);
 
   }
 
